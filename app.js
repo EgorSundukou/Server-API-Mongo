@@ -4,8 +4,9 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
-const productRoute = require('./api/routes/products');
-const orderRoute = require('./api/routes/orders');
+const productRoutes = require('./api/routes/products');
+const orderRoutes = require('./api/routes/orders');
+const userRoutes = require('./api/routes/user');
 
 mongoose.connect("mongodb://node-shop:" +
     process.env.MONGO_ATLAS_PW +
@@ -17,6 +18,7 @@ mongoose.connect("mongodb://node-shop:" +
 mongoose.Promise = global.Promise;
 
 app.use(morgan('dev'));
+app.use('/uploads',express.static('uploads'));
 app.use(bodyParser.urlencoded({exteded: false}));
 app.use(bodyParser.json());
 
@@ -30,8 +32,9 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use('/products',productRoute);
-app.use('/orders',orderRoute);
+app.use('/products',productRoutes);
+app.use('/orders',orderRoutes);
+app.use('/user',userRoutes);
 
 app.use((req, res, next) =>{
     const error = new Error('Not found');
